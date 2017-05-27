@@ -1,5 +1,6 @@
 package it.polito.bar.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -22,7 +23,8 @@ public class Simulator {
 	//Lista degli eventi
 	private PriorityQueue<Event> queue;
 	
-	private Simulator(List<Tavolo> tavoli){
+	public Simulator(List<Tavolo> tavoli){
+		super();
 		this.tavoli=tavoli;
 		this.queue=new PriorityQueue<>();
 	}
@@ -30,7 +32,7 @@ public class Simulator {
 	public void addGruppo(int time, Gruppo g){
 		queue.add(new Event(time, g, EventType.ARRIVO_GRUPPO_CLIENTE));
 	}
-
+	
 	public List<Tavolo> getTavoli() {
 		return tavoli;
 	}
@@ -83,6 +85,8 @@ public class Simulator {
 						assegnato=true;
 						int durata=this.DURATA_MIN_SERVIZIO+(int)(Math.random()*(this.DURATA_MAX_SERVIZIO-this.DURATA_MIN_SERVIZIO));
 						queue.add(new Event(e.getTime()+durata, e.getGruppo(), EventType.USCITA_GRUPPO_CLIENTE));
+						System.out.println(e.getGruppo().getNome()+" assegnato tavolo "+this.numero_totale_clienti+" "+e.getGruppo().getNumero_persone());
+						break;
 					}
 				}
 				if(assegnato==false){
@@ -96,14 +100,16 @@ public class Simulator {
 						//occupano bancone
 						this.numero_totale_clienti+=e.getGruppo().getNumero_persone();
 						this.numero_clienti_soddisfatti+=e.getGruppo().getNumero_persone();	
+						System.out.println(e.getGruppo().getNome()+" bancone "+this.numero_totale_clienti+" "+e.getGruppo().getNumero_persone());
 					}
 				}
 				break;
 			case USCITA_GRUPPO_CLIENTE:
 				for(Tavolo t : this.tavoli){
-					if(t.getGruppo().equals(e.getGruppo())){
+					if(t.getGruppo()!=null && t.getGruppo().equals(e.getGruppo())){
 						t.setGruppo(null);
 						t.setOccupato(false);
+						System.out.println(e.getGruppo().getNome()+" liberato tavolo");
 					}
 				}
 				break;

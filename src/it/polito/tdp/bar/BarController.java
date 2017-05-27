@@ -31,7 +31,7 @@ public class BarController {
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    	txtResult.setText(model.simulazione());
     }
     
     public void setModel(Model model){

@@ -113,6 +113,8 @@ public class Simulator {
 					}
 				}
 				break;
+			default:
+				throw new IllegalArgumentException();
 			}
 		}
 	}
